@@ -1,0 +1,79 @@
+<?php require_once "Views/template/header.phtml";?>
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>Dashboard - <?php echo $lightData->getName()." "?><a class="btn" type="button" data-toggle="modal" data-target="#editName"><i class="fas fa-pen-square fa-xm"></i></a></h1>
+        <!-- Modal -->
+        <div class="modal fade" id="editName" tabindex="-1" role="dialog" aria-labelledby="editNameLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editNameLabel">Edit Name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post">
+                        <div class="modal-body">
+                            <label>
+                                <input type="text" name="editName"/>
+                            </label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="editNameSubmit">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <form method="post">
+            <button type="submit" class="btn btn-danger" name="resetDefault">Reset to default</button>
+        </form><br>
+        <?php
+        $i = 1;
+        while (count($lightData->getAllLights()) != $i-1) {
+            echo '<a href="../colours.php?light='.$i.'"><button type="submit" class="btn btn-success" name="nextLight">'.$lightData->getNameMulti($i).'</button></a>    ';
+            $i += 1;
+        }
+        ?>
+    </div>
+    <h1>Quick Colours</h1><br>
+    <div class="row">
+        <div class="col-sm">
+            <form method="post">
+                <button type="submit" name="quickRed" style="width: 15rem; margin-bottom: 3rem; height: 12rem; background: red"></button>
+            </form>
+        </div>
+        <div class="col-sm">
+            <form method="post">
+                <button type="submit" name="quickGreen" style="width: 15rem; margin-bottom: 3rem; height: 12rem; background: green" ></button>
+            </form>
+        </div>
+        <div class="col-sm">
+            <form method="post">
+                <button type="submit" name="quickBlue" style="width: 15rem; margin-bottom: 3rem; height: 12rem; background: blue" ></button>
+            </form>
+        </div>
+        <div class="col-sm">
+            <form method="post">
+                <button type="submit" name="quickYellow" style="width: 15rem; margin-bottom: 3rem; height: 12rem; background: yellow" ></button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<?php
+if (isset($_POST["quickRed"])) {
+    $lightData->quickRed();
+}
+else if (isset($_POST["quickGreen"])) {
+    $lightData->quickGreen();
+}
+else if (isset($_POST["quickBlue"])) {
+    $lightData->quickBlue();
+}
+else if (isset($_POST["quickYellow"])) {
+    $lightData->quickYellow();
+}
+
+require_once "Views/template/footer.phtml";?>

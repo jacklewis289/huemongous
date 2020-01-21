@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title><?php echo $view->pageTitle; ?></title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../css/starter-template.css" rel="stylesheet">
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/4658ae3898.js" crossorigin="anonymous"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href=""><span style="color: orangered; ">H</span><span style="color: limegreen; ">U</span><span style="color: deepskyblue; ">E</span>mongous</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <?php
+            if (!isset($_COOKIE["host"]) && (!isset($_COOKIE["username"]))) {
+                echo '<li class="nav-item active">';
+                echo     '<a class="nav-link" href="../../index.php">Connect<span class="sr-only">(current)</span></a>';
+                echo '</li>';
+                echo '<li class="nav-item active">';
+                echo     '<a class="nav-link" href="../../help.php">Help<span class="sr-only">(current)</span></a>';
+                echo '</li>';
+                echo '</ul>';
+
+            }
+
+            if(isset($_GET["light"])) {
+                $light = $_GET["light"];
+            }
+            else {
+                $light = "1";
+            }
+            if (isset($_COOKIE["host"]) && (isset($_COOKIE["username"]))) {
+                echo '<li class="nav-item active">';
+                echo     '<a class="nav-link" href="../../light.php?light='.$light.'">Light Settings<span class="sr-only">(current)</span></a>';
+                echo '</li>';
+                echo '<li class="nav-item active">';
+                echo     '<a class="nav-link" href="../../colours.php?light='.$light.'">Quick Colours<span class="sr-only">(current)</span></a>';
+                echo '</li>';
+                echo '<li class="nav-item active">';
+                echo     '<a class="nav-link" href="../../temperaturelighting.php?light='.$light.'">Temperature Lightning<span class="sr-only">(current)</span></a>';
+                echo '</li>';
+                echo '</ul>';
+                echo '<ul class="navbar-nav ml-auto">';
+                echo     '<li class="nav-item active">';
+                echo         '<a class="nav-link" href="../../disconnect.php">Disconnect<span class="sr-only">(current)</span></a>';
+                echo     '</li>';
+                echo '</ul>';
+            }
+            ?>
+    </div>
+</nav>
+</body>
+</html>

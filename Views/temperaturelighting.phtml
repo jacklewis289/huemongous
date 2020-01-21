@@ -1,0 +1,148 @@
+<?php require_once "Views/template/header.phtml";?>
+
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>Dashboard - <?php echo $lightData->getName()." "?><a class="btn" type="button" data-toggle="modal" data-target="#editName"><i class="fas fa-pen-square fa-xm"></i></a></h1>
+    <!-- Modal -->
+        <div class="modal fade" id="editName" tabindex="-1" role="dialog" aria-labelledby="editNameLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editNameLabel">Edit Name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post">
+                        <div class="modal-body">
+                            <label>
+                                <input type="text" name="editName"/>
+                            </label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="editNameSubmit">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <form method="post">
+            <button type="submit" class="btn btn-danger" name="resetDefault">Reset to default</button>
+        </form><br>
+        <?php
+        $i = 1;
+        while (count($lightData->getAllLights()) != $i-1) {
+            echo '<a href="../temperaturelighting.php?light='.$i.'"><button type="submit" class="btn btn-success" name="nextLight">'.$lightData->getNameMulti($i).'</button></a>    ';
+            $i += 1;
+        }
+        ?>
+        </div>
+
+    <div class="row">
+        <div class="row justify-content-start">
+            <div class="col-sm">
+                <button name="getWeather" onclick="getLocation()" class="btn btn-primary" style="width: 10rem">Quick Setup</button>
+            </div>
+            <div class="col-sm">
+                <button type="submit" class="btn btn-primary" name="getWeather" style="width: 10rem"  data-toggle="modal" data-target="#manualSetup">Manual Setup</button>
+                <!-- Modal -->
+                <div class="modal fade" id="manualSetup" tabindex="-1" role="dialog" aria-labelledby="manualSetupLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="manualSetupLabel">Manual Setup</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="post">
+                                <div class="modal-body">
+                                    <label>
+                                        Location: <br>
+                                        <input type="text" name="location"/>
+                                    </label>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="submitLongLat">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+        function showPosition(position) {
+            document.cookie = "latitude="+position.coords.latitude;
+            document.cookie = "longitude="+position.coords.longitude;
+            ({href: window.location.href} = window.location);
+            <?php $lightData->setTemperatureWeather($weatherData->getTemperature()); ?>
+        }
+    </script>
+    <br><h1>Weather Data</h1><br>
+    <div class="row">
+        <div class="row justify-content-start">
+        <div class="col-sm">
+            <div class="card" style="width: 10rem; margin-bottom: 3rem; height: 5rem">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo $weatherData->getName(); ?></h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 10rem; margin-bottom: 3rem; height: 5rem">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo $weatherData->getTemperature()."°C"; ?></h5>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <script>
+        const delayInMilliseconds = 300000; //1 second
+        setTimeout(function() {
+            $(document).ready(function() {
+                $("#submit").click();
+            });
+        }, delayInMilliseconds);
+    </script>
+    <form method="post">
+        <button type="submit" class="btn btn-primary" name="changeToTemperature" id="submit">Update</button>
+    </form>
+
+    <form method="post">
+        <br><br><input type="text" name="temperature"><br><br>
+        <button type="submit" class="btn btn-primary" name="setTemperatureDev">[DEV] Temp Update</button>
+    </form>
+    <form method="post">
+        <br><button type="submit" class="btn btn-primary" name="showTestResults">[DEV] Show HUE test results</button>
+    </form>
+</main>
+
+<?php
+if (isset($_POST["editNameSubmit"])) {
+    $lightData->setName();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["changeToTemperature"])) {
+    $lightData->setTemperatureWeather($weatherData->getTemperature());
+}
+else if (isset($_POST["setTemperatureDev"])) {
+    $lightData->setTemperatureWeather($_POST["temperature"]);
+}
+else if (isset($_POST["showTestResults"])) {
+    $lightData->testSetTemperatureWeather();
+}
+?>
+
+<?php require_once "Views/template/footer.phtml"; ?>

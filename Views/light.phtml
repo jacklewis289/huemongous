@@ -1,0 +1,327 @@
+<?php require_once "Views/template/header.phtml";?>
+
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>Dashboard - <?php echo $lightData->getName()." "?><a class="btn" type="button" data-toggle="modal" data-target="#editName"><i class="fas fa-pen-square fa-xm"></i></a></h1>
+        <!-- Modal -->
+        <div class="modal fade" id="editName" tabindex="-1" role="dialog" aria-labelledby="editNameLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editNameLabel">Edit Name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post">
+                        <div class="modal-body">
+                            <label>
+                                <input type="text" name="editName"/>
+                            </label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="editNameSubmit">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <form method="post">
+            <button type="submit" class="btn btn-danger" name="resetDefault">Reset to default</button>
+        </form><br>
+        <?php
+        $i = 1;
+        while (count($lightData->getAllLights()) != $i-1) {
+            echo '<a href="../light.php?light='.$i.'"><button type="submit" class="btn btn-success" name="nextLight">'.$lightData->getNameMulti($i).'</button></a>    ';
+            $i += 1;
+        }
+        ?>
+    </div>
+
+
+    <h1>Product Information</h1>
+    <div class="row">
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; margin-bottom: 3rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Light Number</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">This is the light number</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getId()?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Light Type</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">This is the type of light</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getType()?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Light Mode</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">This is the light mode</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getModelId()?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Software Version</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">This is the software version of the light</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getSoftwareVersion()?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Light Information</h1>
+    <div class="row">
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; margin-bottom: 3rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Light Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">This is the name of the light</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getName()?></p>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editName">
+                        Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Light On</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Is the light on?</h6>
+                    <p class="card-text"><?php if($lightData->getLight()->isOn() == "1") {echo "Is On: Yes". nl2br("\n");} else {echo "Is On: No". nl2br("\n");} ?></p>
+                    <?php
+                    if($lightData->getLight()->isOn() == "1") {
+                        echo '<form method="post">';
+                        echo     '<button type="submit" class="btn btn-primary" name="lightOff">Turn Off</button>';
+                        echo '</form>';
+                    }
+                    else {
+                        echo '<form method="post">';
+                        echo     '<button type="submit" class="btn btn-primary" name="lightOn">Turn On</button>';
+                        echo '</form>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Light Alert</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Has the light got an alert set</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getAlert()?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">X Y</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">The light's X & Y value</h6>
+                    <p class="card-text"><?php echo "X: ".$lightData->getLight()->getXY()['x'].nl2br("\n"); echo "Y: ".$lightData->getLight()->getXY()['y']?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Effect</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">The light's current effect</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getEffect() ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Colour Temperature</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">The light's current colour temperature</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getColorTemp() ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="width: 15rem; height: 12rem">
+                <div class="card-body">
+                    <h5 class="card-title">Colour Mode</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">The light's current colour mode</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getColorMode() ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+        </div>
+    </div>
+
+    <br><br><h1>Light Settings</h1>
+    <div class="row">
+        <div class="col-sm">
+            <div class="card" style="height: 12.5rem; margin-bottom: 3rem; width: 15rem">
+                <div class="card-body">
+                    <h5 class="card-title">Brightness</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">The light's current Brightness</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getBrightness()?></p>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#brightness">
+                        Change
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="brightness" tabindex="-1" role="dialog" aria-labelledby="brightnessLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="brightnessLabel">Change brightness</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post">
+                                    <div class="modal-body">
+                                        <label>
+                                            Range [0 – 254]<br><br>
+                                            <input type="text" name="brightness"/>
+                                        </label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" name="submitBrightness">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="height: 12.5rem; width: 15rem">
+                <div class="card-body">
+                    <h5 class="card-title">Hue</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">The light's current hue</h6>
+                    <p class="card-text"><?php echo "Hue: ".$lightData->getLight()->getHue(); ?></p><br>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#hue">
+                        Change
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="hue" tabindex="-1" role="dialog" aria-labelledby="hueLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="hueLabel">Change HUE</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post">
+                                    <div class="modal-body">
+                                        <label>
+                                            Range [0 – 65535]<br><br>
+                                            <input type="text" name="hue">
+                                        </label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" name="submitHue">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card" style="height: 12.5rem; width: 15rem">
+                <div class="card-body">
+                    <h5 class="card-title">Saturation</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">The light's current saturation</h6>
+                    <p class="card-text"><?php echo $lightData->getLight()->getSaturation()?></p>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#saturation">
+                        Change
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="saturation" tabindex="-1" role="dialog" aria-labelledby="saturationLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="saturationLabel">Change Saturation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post">
+                                    <div class="modal-body">
+                                        <label>
+                                            Range [0 – 254]<br><br>
+                                            <input type="text" name="saturation">
+                                        </label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" name="submitSaturation">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+        </div>
+    </div>
+</main><!-- /.container -->
+
+<?php
+if(isset($_POST["submitHue"])) {
+    $lightData->setHue();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["submitBrightness"])) {
+    $lightData->setBrightness();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["submitRGB"])) {
+    $lightData->setRGB();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["submitSaturation"])) {
+    $lightData->setSaturation();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["submitXY"])) {
+    $lightData->setXY();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["resetDefault"])) {
+    $lightData->defaultSettings();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["editNameSubmit"])) {
+    $lightData->setName();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["lightOn"])) {
+    $lightData->lightOn();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+else if (isset($_POST["lightOff"])) {
+    $lightData->lightOff();
+    echo "<meta http-equiv='refresh' content='0'>";
+}
+
+require_once "Views/template/footer.phtml"; ?>
